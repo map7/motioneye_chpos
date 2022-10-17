@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 
+DIR="/etc/motioneye"
+
 def backup
-  dest = "/etc/motioneye.#{Time.now.strftime('%Y%m%d')}"
+  dest = "#{DIR}.#{Time.now.strftime('%Y%m%d')}"
 
   if File.exist?(dest)
     puts "ERROR: Backup already exists"
   else
-    cmd="cp -Rv /etc/motioneye #{dest}"
+    cmd="cp -Rv #{DIR} #{dest}"
     puts cmd
     `#{cmd}`
     puts "Backup complete!"
@@ -14,17 +16,34 @@ def backup
 end
 
 def change_camera_position(from,to)
+  puts "Stop motioneye..."
+  `docker stop motioneye`
 
+  puts "Move camera #{from} to #{to}..."
+  `sudo mv #{DIR}/#{to}.conf #{DIR}/#{to}.conf.tmp`
+  `sudo mv #{DIR}/#{from}.conf #{DIR}/#{to}.conf`
+  `sudo mv #{DIR}/#{to}.conf.tmp #{DIR}/#{from}.conf`
+
+  mask_from=from.gsub(/camera/,"mask")
+  mask_to=to.gsub(/camera/,"mask")
+  puts "Move masks #{mask_from} to #{mask_to}..."
+  `sudo mv #{DIR}/#{to}.pgm #{DIR}/#{to}.pgm.tmp`
+  `sudo mv #{DIR}/#{from}.pgm #{DIR}/#{to}.pgm`
+  `sudo mv #{DIR}/#{to}.pgm.tmp #{DIR}/#{from}.pgm`
+  sleep 1
+
+  puts "Start motioneye..."
+  `docker start motioneye`
 end
 
 if ARGV[0] == "backup"
   backup
-elsif ARGV.count == 2 and ARGV[0][0..5] == "camera" and ARGV[1][0..5] == "camera"
+elsif ARGV.count == 2 and ARGV[0][0..6] == "camera-" and ARGV[1][0..6] == "camera-"
   change_camera_position(ARGV[0],ARGV[1])
 else
   puts "\nUSAGE\n"
   puts "$ sudo chpos from to"
   puts "\nEXAMPLE"
-  puts "To move camera4 into position one you would do;"
-  puts "$ sudo chpos camera4 camera1\n\n"
+  puts "To move camera-4 into position one you would do;"
+  puts "$ sudo chpos camera-4 camera-1\n\n"
 end
