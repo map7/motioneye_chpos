@@ -1,0 +1,51 @@
+#+Title: MotionEYE Chpos
+#+OPTIONS: ^:nil
+* MotionEYE Chpos
+
+Script to change position of cameras on a MotionEYE NVR.
+
+NOTE: This is experimental, use at own risk, always backup before hand
+(including the /etc/motioneye directory).
+
+** Installation
+
+On Linux
+
+Clone
+#+BEGIN_SRC sh
+
+#+END_SRC
+
+** Usage
+
+1. Backup
+   : chpos backup
+   This will backup /etc/motioneye to /etc/motioneye-[date]
+
+2. Change camera 4 to be camera 1
+   : chpos camera4 camera1
+   This will swap the camera4 & camera1 around. You should step
+   through each camera position starting at position 1 and build your
+   order.
+
+3. Restart & test
+   : systemctl restart motioneye
+   OR for docker
+   : docker restart motioneye
+
+** Authors
+
+Michael Pope
+[[mailto:michael@dtcorp.com.au][michael@dtcorp.com.au]]
+
+Distributed under the XYZ license. See =LICENSE= for more information.
+
+[[https://github.com/dbader/][https://github.com/yourname/github-link]]
+
+** Contributing
+
+1. Fork it ([[https://github.com/yourname/yourproject/fork]])
+2. Create your feature branch (=git checkout -b feature/fooBar=)
+3. Commit your changes (=git commit -am 'Add some fooBar'=)
+4. Push to the branch (=git push origin feature/fooBar=)
+5. Create a new Pull Request
