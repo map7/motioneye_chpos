@@ -11,10 +11,14 @@ NOTE: This is experimental, use at own risk, always backup before hand
 
 On Linux
 
-Clone
-#+BEGIN_SRC sh
+1. Clone
+   #+BEGIN_SRC sh
+   https://github.com/map7/motioneye_chpos.git
+   #+END_SRC
 
-#+END_SRC
+2. Change permissions
+   : cd motioneye_chpos
+   : chmod +x chpos
 
 ** Usage
 
