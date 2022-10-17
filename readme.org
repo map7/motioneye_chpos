@@ -26,8 +26,8 @@ On Linux
    : chpos backup
    This will backup /etc/motioneye to /etc/motioneye-[date]
 
-2. Change camera 4 to be camera 1
-   : chpos camera4 camera1
+2. Change camera id '4' to be camera id '1'
+   : chpos 4 1
    This will swap the camera4 & camera1 around. You should step
    through each camera position starting at position 1 and build your
    order.

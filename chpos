@@ -16,30 +16,24 @@ def backup
 end
 
 def change_camera_position(from,to)
-  puts "Stop motioneye..."
-  `docker stop motioneye`
+  puts "Move camera camera-#{from} to camera-#{to}..."
+  `sudo mv #{DIR}/camera-#{to}.conf #{DIR}/camera-#{to}.conf.tmp`
+  `sudo mv #{DIR}/camera-#{from}.conf #{DIR}/camera-#{to}.conf`
+  `sudo mv #{DIR}/camera-#{to}.conf.tmp #{DIR}/camera-#{from}.conf`
 
-  puts "Move camera #{from} to #{to}..."
-  `sudo mv #{DIR}/#{to}.conf #{DIR}/#{to}.conf.tmp`
-  `sudo mv #{DIR}/#{from}.conf #{DIR}/#{to}.conf`
-  `sudo mv #{DIR}/#{to}.conf.tmp #{DIR}/#{from}.conf`
-
-  mask_from=from.gsub(/camera/,"mask")
-  mask_to=to.gsub(/camera/,"mask")
-  puts "Move masks #{mask_from} to #{mask_to}..."
-  `sudo mv #{DIR}/#{to}.pgm #{DIR}/#{to}.pgm.tmp`
-  `sudo mv #{DIR}/#{from}.pgm #{DIR}/#{to}.pgm`
-  `sudo mv #{DIR}/#{to}.pgm.tmp #{DIR}/#{from}.pgm`
-  sleep 1
-
-  puts "Start motioneye..."
-  `docker start motioneye`
+  puts "Move masks mask_#{from} to mask_#{to}..."
+  `sudo mv #{DIR}/mask_#{to}.pgm #{DIR}/mask_#{to}.pgm.tmp`
+  `sudo mv #{DIR}/mask_#{from}.pgm #{DIR}/mask_#{to}.pgm`
+  `sudo mv #{DIR}/mask_#{to}.pgm.tmp #{DIR}/mask_#{from}.pgm`
 end
 
 if ARGV[0] == "backup"
   backup
-elsif ARGV.count == 2 and ARGV[0][0..6] == "camera-" and ARGV[1][0..6] == "camera-"
-  change_camera_position(ARGV[0],ARGV[1])
+elsif ARGV[0] == "restart"
+  puts "Restart motioneye..."
+  `docker restart motioneye`
+elsif ARGV.count == 2 and ARGV[0].to_i > 0 and ARGV[1].to_i > 0
+  change_camera_position(ARGV[0].to_i,ARGV[1].to_i)
 else
   puts "\nUSAGE\n"
   puts "$ sudo chpos from to"
