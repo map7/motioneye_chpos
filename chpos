@@ -1,13 +1,30 @@
 #!/usr/bin/env ruby
 
+def backup
+  dest = "/etc/motioneye.#{Time.now.strftime('%Y%m%d')}"
+
+  if File.exist?(dest)
+    puts "ERROR: Backup already exists"
+  else
+    cmd="cp -Rv /etc/motioneye #{dest}"
+    puts cmd
+    `#{cmd}`
+    puts "Backup complete!"
+  end
+end
+
+def change_camera_position(from,to)
+
+end
+
 if ARGV[0] == "backup"
   backup
 elsif ARGV.count == 2 and ARGV[0][0..5] == "camera" and ARGV[1][0..5] == "camera"
   change_camera_position(ARGV[0],ARGV[1])
 else
   puts "\nUSAGE\n"
-  puts "$ chpos from to"
+  puts "$ sudo chpos from to"
   puts "\nEXAMPLE"
   puts "To move camera4 into position one you would do;"
-  puts "$ chpos camera4 camera1\n\n"
+  puts "$ sudo chpos camera4 camera1\n\n"
 end
