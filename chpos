@@ -36,8 +36,11 @@ elsif ARGV.count == 2 and ARGV[0].to_i > 0 and ARGV[1].to_i > 0
   change_camera_position(ARGV[0].to_i,ARGV[1].to_i)
 else
   puts "\nUSAGE\n"
+  puts "\nBackup\n"
+  puts "$ sudo chpos backup"
+  puts "\nMove Camera\n"
   puts "$ sudo chpos from to"
   puts "\nEXAMPLE"
   puts "To move camera-4 into position one you would do;"
-  puts "$ sudo chpos camera-4 camera-1\n\n"
+  puts "$ sudo chpos 4 1\n\n"
 end
