@@ -3,6 +3,9 @@
 DIR="/etc/motioneye"
 
 def backup
+
+  `rm /etc/motioneye*/core`
+
   dest = "#{DIR}.#{Time.now.strftime('%Y%m%d')}"
 
   if File.exist?(dest)
